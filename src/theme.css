@@ -1,0 +1,53 @@
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    src: url("https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoapqRONz6n5ZEWVa9RoB7wa0.woff2") format("woff2");
+}
+
+@theme {
+    /* Fonts */
+    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+    --font-fraunces: 'Fraunces', serif;
+
+    /* Vert sauge — couleur principale */
+    --color-green-50:  #EAF0EB;
+    --color-green-100: #C8DBC9;
+    --color-green-200: #A5C5A7;
+    --color-green-300: #83B085;
+    --color-green-400: #6B8F71;
+    --color-green-500: #5A7A5F;
+    --color-green-600: #4A6B50;
+    --color-green-700: #3A5540;
+    --color-green-800: #2A3F30;
+    --color-green-900: #1A2920;
+
+    /* Terracotta — accent chaud */
+    --color-terra-50:  #F9EDE5;
+    --color-terra-100: #F0C9B0;
+    --color-terra-200: #E4A87D;
+    --color-terra-300: #D4884F;
+    --color-terra-400: #C17F59;
+    --color-terra-500: #A86A44;
+    --color-terra-600: #8C5533;
+
+    /* Fonds et neutres */
+    --color-cream-50:  #FDFAF6;
+    --color-cream-100: #F5F2EE;
+    --color-cream-200: #EDE9E4;
+    --color-cream-300: #D4CFC9;
+    --color-cream-400: #9C8F89;
+    --color-cream-500: #6B5E57;
+    --color-cream-600: #2C2420;
+
+    /* États */
+    --color-success: #5A9B6B;
+    --color-warning: #E8B84B;
+    --color-error:   #C0544B;
+    --color-info:    #5B8DB8;
+    --color-lavender: #9B8EC4;
+}
+
+body {
+    font-family: var(--font-jakarta);
+    background-color: var(--color-cream-50);
+    color: var(--color-cream-600);
+}
