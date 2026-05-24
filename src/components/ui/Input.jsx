@@ -35,7 +35,7 @@ const Input = ({
                 {/* Icône gauche */}
                 {leftIcon && (
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                         style={{ color: 'var(--color-cream-400)' }}>
+                        style={{ color: 'var(--color-cream-400)' }}>
                         {leftIcon}
                     </div>
                 )}
@@ -44,8 +44,8 @@ const Input = ({
                     id={name}
                     name={name}
                     type={type}
-                    // Si icône → padding gauche augmenté pour ne pas chevaucher l'icône
-                    className={`input-field ${leftIcon ? 'pl-10' : ''} ${error ? 'error' : ''}`}
+                    className={`input-field ${error ? 'error' : ''}`}
+                    style={{ paddingLeft: leftIcon ? '2.5rem' : undefined }}
                     {...rest}
                 />
             </div>
