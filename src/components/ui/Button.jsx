@@ -3,14 +3,15 @@ import { Loader2 } from 'lucide-react';
 // ─────────────────── Map des variants ───────────────────
 // Classes déjà dans index.css
 const VARIANT_CLASSES = {
-    primary: 'btn-primary',
+    primary:   'btn-primary',
     secondary: 'btn-secondary',
-    ghost: 'btn-ghost',
-    danger: 'btn-danger',
+    teal:      'btn-teal',
+    ghost:     'btn-ghost',
+    danger:    'btn-danger',
 };
 
 // ─────────────────── Map des tailles ───────────────────
-// Taille de texte (le reste dans classes .btn-*)
+// Taille de texte
 const SIZE_CLASSES = {
     sm: 'py-1.5 px-4 text-xs',
     md: 'py-2 px-5 text-sm',
@@ -41,12 +42,12 @@ const Button = ({
     disabled = false,
     children,
     className = '',
-    ...rest  // capture onClick, aria-label, data-*, etc.
+    ...rest
 }) => {
     // Un bouton désactivé
     const isDisabled = disabled || isLoading;
 
-    // ClassName finale
+    // ClassName
     const classes = [
         VARIANT_CLASSES[variant] ?? VARIANT_CLASSES.primary,
         SIZE_CLASSES[size] ?? SIZE_CLASSES.md,
@@ -65,7 +66,7 @@ const Button = ({
             className={classes}
             {...rest}
         >
-            {/* Spinner ou icône gauche */}
+            {/* Spinner gauche */}
             {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />
             ) : (
