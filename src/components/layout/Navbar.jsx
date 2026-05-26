@@ -1,12 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { PawPrint } from 'lucide-react';
+import { PawPrint, LogOut } from 'lucide-react';
 import Avatar from '../ui/Avatar';
 import useAuth from '../../hooks/useAuth';
 
-/**
- *
- * @param {string} title
- */
 const Navbar = ({ title = '' }) => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
@@ -22,73 +18,83 @@ const Navbar = ({ title = '' }) => {
 
     return (
         <header
-            className="sticky top-0 z-40 flex items-center justify-between px-4 md:px-6 h-16 border-b"
+            className="sticky top-0 z-40 flex items-center justify-between px-5 md:px-7 h-16 border-b"
             style={{
                 backgroundColor: 'white',
-                borderColor: 'var(--color-cream-200)',
+                borderColor: 'var(--color-border)',
             }}
         >
-            {/* ──────────────── Gauche — Logo ──────────────── */}
+            {/* Logo */}
             <button
-                onClick={() => navigate('/dashboard')}
-                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2.5 cursor-pointer"
             >
                 <div
-                    className="w-8 h-8 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: 'var(--color-green-400)' }}
+                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{ background: 'var(--gradient-orange)' }}
                 >
                     <PawPrint size={18} color="white" />
                 </div>
-
-                {/* Nom de l'app */}
                 <span
                     className="hidden md:block font-semibold text-base title-serif"
-                    style={{ color: 'var(--color-cream-600)' }}
+                    style={{
+                        fontFamily: 'var(--font-syne)',
+                        color: 'var(--color-text-primary)',
+                    }}
                 >
                     PetBuddy
                 </span>
             </button>
 
-            {/* ──────────────── Centre — Titre (mobile) ──────────────── */}
+            {/* Titre mobile */}
             {title && (
                 <span
-                    className="md:hidden font-semibold text-sm absolute left-1/2 -translate-x-1/2"
-                    style={{ color: 'var(--color-cream-600)' }}
+                    className="lg:hidden font-bold text-sm absolute left-1/2 -translate-x-1/2"
+                    style={{ color: 'var(--color-text-primary)' }}
                 >
                     {title}
                 </span>
             )}
 
-            {/* ──────────────── Droite — Avatar ──────────────── */}
+            {/* Droite */}
             <div className="flex items-center gap-3">
-                {/* Prénom — desktop */}
                 {user && (
                     <span
-                        className="hidden md:block text-sm"
-                        style={{ color: 'var(--color-cream-500)' }}
+                        className="hidden md:block text-sm font-semibold"
+                        style={{ color: 'var(--color-text-muted)' }}
                     >
-                        Bonjour, {user.firstName}
+                        {user.firstName}
                     </span>
                 )}
 
-                {/* Avatar cliquable → page profil */}
-                <button onClick={() => navigate('/profile')} className="cursor-pointer">
-                    <Avatar
-                        src={user?.avatar}
-                        name={fullName}
-                        size="sm"
-                    />
+                <button
+                    onClick={() => navigate('/profile')}
+                    className="cursor-pointer"
+                >
+                    <Avatar src={user?.avatar} name={fullName} size="sm" />
                 </button>
 
-                {/* Bouton logout — desktop */}
+                {/* Bouton déconnexion */}
                 <button
                     onClick={handleLogout}
-                    className="hidden md:block text-xs px-3 py-1.5 rounded-lg transition-colors"
+                    className="hidden md:flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl cursor-pointer transition-all duration-200"
                     style={{
-                        color: 'var(--color-cream-400)',
-                        border: '1px solid var(--color-cream-200)',
+                        color: 'var(--color-text-muted)',
+                        border: '1.5px solid var(--color-border-md)',
+                        backgroundColor: 'var(--color-bg)',
+                    }}
+                    onMouseEnter={e => {
+                        e.currentTarget.style.backgroundColor = 'rgba(224, 62, 62, 0.08)';
+                        e.currentTarget.style.color = 'var(--color-error)';
+                        e.currentTarget.style.borderColor = 'var(--color-error)';
+                    }}
+                    onMouseLeave={e => {
+                        e.currentTarget.style.backgroundColor = 'var(--color-bg)';
+                        e.currentTarget.style.color = 'var(--color-text-muted)';
+                        e.currentTarget.style.borderColor = 'var(--color-border-md)';
                     }}
                 >
+                    <LogOut size={13} />
                     Déconnexion
                 </button>
             </div>
