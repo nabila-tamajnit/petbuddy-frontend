@@ -21,10 +21,10 @@ const EmptyState = ({
             {icon && (
                 <div
                     className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
-                    style={{ backgroundColor: 'var(--color-green-50)' }}
+                    style={{ backgroundColor: 'var(--color-orange-50)' }}
                 >
                     {/* Cloner l'icône pour lui imposer taille et couleur */}
-                    <span style={{ color: 'var(--color-green-400)' }}>
+                    <span style={{ color: 'var(--color-orange-400)' }}>
                         {icon}
                     </span>
                 </div>
