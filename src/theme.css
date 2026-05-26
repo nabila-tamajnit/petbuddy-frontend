@@ -1,48 +1,76 @@
 @theme {
-    /* Fonts */
-    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
-    --font-fraunces: 'Fraunces', serif;
+    /* ────────────────────── Polices ────────────────────── */
+    --font-nunito: 'Nunito', sans-serif;
+    --font-syne:   'Syne', sans-serif;
 
-    /* Vert sauge — couleur principale */
-    --color-green-50:  #EAF0EB;
-    --color-green-100: #C8DBC9;
-    --color-green-200: #A5C5A7;
-    --color-green-300: #83B085;
-    --color-green-400: #6B8F71;
-    --color-green-500: #5A7A5F;
-    --color-green-600: #4A6B50;
-    --color-green-700: #3A5540;
-    --color-green-800: #2A3F30;
-    --color-green-900: #1A2920;
+    /* ────────────────────── Orange principal ────────────────────── */
+    --color-orange-50:  #FFF5F0;
+    --color-orange-100: #FFD9C8;
+    --color-orange-200: #FFB499;
+    --color-orange-300: #FF8C66;
+    --color-orange-400: #F56A38;
+    --color-orange-500: #D44E20;
+    --color-orange-600: #A83818;
+    --color-orange-700: #7A2810;
 
-    /* Terracotta — accent chaud */
-    --color-terra-50:  #F9EDE5;
-    --color-terra-100: #F0C9B0;
-    --color-terra-200: #E4A87D;
-    --color-terra-300: #D4884F;
-    --color-terra-400: #C17F59;
-    --color-terra-500: #A86A44;
-    --color-terra-600: #8C5533;
+    /* ────────────────────── Teal accent ────────────────────── */
+    --color-teal-50:  #F0FDFA;
+    --color-teal-100: #CCFBF1;
+    --color-teal-200: #99F6E4;
+    --color-teal-300: #5EEAD4;
+    --color-teal-400: #0D9488;
+    --color-teal-500: #0F766E;
+    --color-teal-600: #115E59;
+    --color-teal-700: #134E4A;
 
-    /* Fonds et neutres */
-    --color-cream-50:  #FDFAF6;
-    --color-cream-100: #F5F2EE;
-    --color-cream-200: #EDE9E4;
-    --color-cream-300: #D4CFC9;
-    --color-cream-400: #9C8F89;
-    --color-cream-500: #6B5E57;
-    --color-cream-600: #2C2420;
+    /* ────────────────────── Violet wellness ────────────────────── */
+    --color-purple-50:  #F5F0FF;
+    --color-purple-100: #E0D4FF;
+    --color-purple-400: #7C4DFF;
+    --color-purple-600: #5025D1;
 
-    /* États */
-    --color-success: #5A9B6B;
-    --color-warning: #E8B84B;
-    --color-error:   #C0544B;
-    --color-info:    #5B8DB8;
-    --color-lavender: #9B8EC4;
+    /* ────────────────────── Jaune rappels ────────────────────── */
+    --color-yellow-50:  #FFFBEA;
+    --color-yellow-100: #FFF0B3;
+    --color-yellow-400: #F5C400;
+    --color-yellow-600: #B38A00;
+
+    /* ────────────────────── Neutres ────────────────────── */
+    --color-bg:      #FAFAF8;
+    --color-surface: #FFFFFF;
+    --color-border:  #EBEBEB;
+    --color-border-md: #D4D4D4;
+
+    --color-text-primary:   #1A1A1A;
+    --color-text-secondary: #555555;
+    --color-text-muted:     #999999;
+    --color-text-light:     #C4C4C4;
+
+    /* ────────────────────── États sémantiques ────────────────────── */
+    --color-success: #0D9488;
+    --color-warning: #F5C400;
+    --color-error:   #E03E3E;
+    --color-info:    #3D8EF0;
+
+    /* ────────────────────── Shadows ────────────────────── */
+    --shadow-xs:   0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.10);
+    --shadow-lg:   0 8px 40px rgba(0, 0, 0, 0.12);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    /* ────────────────────── Dégradés ────────────────────── */
+    --gradient-orange: linear-gradient(135deg, #F56A38 0%, #D44E20 100%);
+    --gradient-teal:   linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+    --gradient-purple: linear-gradient(135deg, #7C4DFF 0%, #5025D1 100%);
+    --gradient-hero:   linear-gradient(135deg, #F56A38 0%, #FF8C66 60%, #FFB499 100%);
+    --gradient-warm:   linear-gradient(135deg, #F56A38 0%, #0D9488 100%);
 }
 
 body {
-    font-family: var(--font-jakarta);
-    background-color: var(--color-cream-50);
-    color: var(--color-cream-600);
+    font-family: var(--font-nunito);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
