@@ -1,10 +1,5 @@
 /**
  * Composant Avatar
- *
- * Si src est fourni → affiche l'image
- * Si src est absent → affiche les initiales extraites de name
- * La couleur de fond est dérivée de la première lettre du nom
- *
  * @param {string} src       - URL de l'image
  * @param {string} name      - nom complet
  * @param {string} size      - sm | md | lg
@@ -13,12 +8,12 @@
 
 // ─── Palette de couleurs pour les avatars sans image ─────────────
 const AVATAR_COLORS = [
-    { bg: 'var(--color-green-100)',  text: 'var(--color-green-700)' },
-    { bg: 'var(--color-terra-100)',  text: 'var(--color-terra-600)' },
-    { bg: 'var(--color-cream-200)',  text: 'var(--color-cream-600)' },
-    { bg: '#E8EAF6',                 text: '#3949AB' },
-    { bg: '#FCE4EC',                 text: '#C2185B' },
-    { bg: '#E0F2F1',                 text: '#00796B' },
+    { bg: 'var(--color-orange-100)', text: 'var(--color-orange-600)' },
+    { bg: 'var(--color-teal-100)',   text: 'var(--color-teal-600)'   },
+    { bg: '#F0F0F0',                 text: '#555555'                  },
+    { bg: '#EDE9FF',                 text: '#5B21B6'                  },
+    { bg: '#FFF8E0',                 text: '#8C5A00'                  },
+    { bg: '#E0F7FA',                 text: '#00695C'                  },
 ];
 
 // ────────────────────────── Tailles ──────────────────────────
@@ -89,7 +84,7 @@ const Avatar = ({
         );
     }
 
-    // ────────────────────────── Sans image → initiales ──────────────────────────
+    // ────────────────────────── Sans image ──────────────────────────
     return (
         <div
             className={baseClasses}
