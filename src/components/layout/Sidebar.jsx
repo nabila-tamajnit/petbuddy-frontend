@@ -8,7 +8,7 @@ import useAuth from '../../hooks/useAuth';
  */
 
 const MAIN_LINKS = [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord', shortLabel: 'Accueil' },
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord', shortLabel: 'Dashboard' },
     { to: '/animals', icon: PawPrint, label: 'Mes animaux', shortLabel: 'Animaux' },
     { to: '/reminders', icon: Bell, label: 'Rappels', shortLabel: 'Rappels' },
 ];
