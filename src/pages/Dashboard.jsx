@@ -81,14 +81,15 @@ const Dashboard = () => {
                             }
                         </p>
                     </div>
-                    {animals.length > 0 && (
+                    {/* {animals.length > 0 && (
                         <Button
                             leftIcon={<Plus size={16} />}
                             onClick={() => navigate('/animals/new')}
+                            className="hidden sm:inline-flex"
                         >
                             Ajouter un animal
                         </Button>
-                    )}
+                    )} */}
                 </div>
 
                 {animals.length === 0 ? (
