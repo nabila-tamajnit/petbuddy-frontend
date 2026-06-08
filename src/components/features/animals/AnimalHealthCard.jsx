@@ -4,13 +4,6 @@ import Button from '../../ui/Button';
 import { formatDate } from '../../../utils/formatters';
 import { HEALTH_TYPE_LABELS } from '../../../utils/constants';
 
-/**
- * Card health records d'un animal
- *
- * @param {string}   animalId - id de l'animal
- * @param {array}    records  - liste des health records
- * @param {function} onSelect - callback quand on clique sur un record
- */
 const AnimalHealthCard = ({ animalId, records, onSelect }) => {
     const navigate = useNavigate();
 
@@ -83,15 +76,17 @@ const AnimalHealthCard = ({ animalId, records, onSelect }) => {
                         </div>
                     ))}
 
-                    {records.length > 4 && (
-                        <button
-                            onClick={() => navigate(`/animals/${animalId}/health-records`)}
-                            className="text-xs font-bold text-center pt-2 cursor-pointer hover:opacity-70 transition-opacity"
-                            style={{ color: 'var(--color-teal-500)' }}
-                        >
-                            Voir tous les {records.length} records
-                        </button>
-                    )}
+                    <button
+                        onClick={() => navigate(`/animals/${animalId}/health-records`)}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer hover:opacity-80 mt-2"
+                        style={{
+                            backgroundColor: 'var(--color-teal-50)',
+                            color: 'var(--color-teal-600)',
+                            border: '1.5px solid var(--color-teal-100)',
+                        }}
+                    >
+                        Voir tout le suivi santé
+                    </button>
                 </div>
             )}
         </div>
