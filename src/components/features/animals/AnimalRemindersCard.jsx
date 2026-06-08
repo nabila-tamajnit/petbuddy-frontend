@@ -1,43 +1,31 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    Plus, ArrowUpRight, AlertCircle,
-    ChevronLeft, ChevronRight,
-} from 'lucide-react';
+import { Plus, ArrowUpRight, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import Button from '../../ui/Button';
 import { formatDate, isOverdue, isUpcoming } from '../../../utils/formatters';
-import { REMINDER_TYPE_LABELS } from '../../../utils/constants';
+import { REMINDER_TYPE_LABELS, HEALTH_TYPE_LABELS } from '../../../utils/constants';
 
-/**
- * Card rappels avec mini-calendrier
- *
- * @param {string}   animalId  - id de l'animal
- * @param {array}    reminders - liste des rappels
- * @param {function} onSelect  - callback quand on clique sur un rappel
- */
-const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
+const AnimalRemindersCard = ({ animalId, reminders, records = [], onSelect, onSelectRecord, }) => {
     const navigate = useNavigate();
 
     const today = new Date();
     const [currentDate, setCurrentDate] = useState(
         new Date(today.getFullYear(), today.getMonth(), 1)
     );
-    // Jour sélectionné dans le calendrier
     const [selectedDay, setSelectedDay] = useState(null);
 
-    const year  = currentDate.getFullYear();
+    const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
     const monthName = new Date(year, month, 1).toLocaleDateString('fr-FR', {
-        month: 'long',
-        year: 'numeric',
+        month: 'long', year: 'numeric',
     });
 
-    const daysInMonth     = new Date(year, month + 1, 0).getDate();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
-    const startOffset     = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+    const startOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
 
-    // Map jour → rappels de ce jour
+    // ─────────────── Map jour → rappels de ce mois ──────────────
     const remindersByDay = reminders.reduce((acc, r) => {
         const d = new Date(r.dueDate);
         if (d.getFullYear() === year && d.getMonth() === month) {
@@ -48,10 +36,16 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
         return acc;
     }, {});
 
-    // Rappels du jour sélectionné
-    const selectedDayReminders = selectedDay
-        ? (remindersByDay[selectedDay] ?? [])
-        : [];
+    // ─────────────── Map jour → health records de ce mois ──────────────
+    const recordsByDay = records.reduce((acc, r) => {
+        const d = new Date(r.date);
+        if (d.getFullYear() === year && d.getMonth() === month) {
+            const day = d.getDate();
+            if (!acc[day]) acc[day] = [];
+            acc[day].push(r);
+        }
+        return acc;
+    }, {});
 
     const prevMonth = () => {
         setSelectedDay(null);
@@ -63,15 +57,17 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
     };
 
     const handleDayClick = (day) => {
-        // Si le jour a des rappels ou si on re-clique → toggle
-        if (selectedDay === day) {
-            setSelectedDay(null);
-        } else if (remindersByDay[day]) {
-            setSelectedDay(day);
-        }
+        const hasContent = remindersByDay[day] || recordsByDay[day];
+        if (!hasContent) return;
+        // Reclic sur le même jour → ferme
+        setSelectedDay(prev => prev === day ? null : day);
     };
 
     const pendingReminders = reminders.filter(r => r.status === 'pending');
+
+    // Éléments du jour sélectionné
+    const selectedReminders = selectedDay ? (remindersByDay[selectedDay] ?? []) : [];
+    const selectedRecords = selectedDay ? (recordsByDay[selectedDay] ?? []) : [];
 
     return (
         <div className="card p-5">
@@ -80,7 +76,7 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                     className="text-xs font-black uppercase tracking-widest"
                     style={{ color: 'var(--color-text-muted)' }}
                 >
-                    Rappels
+                    Rappels & Santé
                     {pendingReminders.length > 0 && (
                         <span
                             className="ml-2 px-2 py-0.5 rounded-full text-xs"
@@ -98,24 +94,21 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                     leftIcon={<Plus size={14} />}
                     onClick={() => navigate(`/animals/${animalId}/reminders/new`)}
                 >
-                    Ajouter
+                    Rappel
                 </Button>
             </div>
 
-            {/* ─────────────── Calendrier ─────────────── */}
+            {/* ─────────────────── Calendrier ─────────────────── */}
             <div
                 className="rounded-xl p-3 mb-4"
                 style={{ backgroundColor: 'var(--color-bg)' }}
             >
-                {/* Navigation mois */}
+                {/* Navigation */}
                 <div className="flex items-center justify-between mb-2">
                     <button
                         onClick={prevMonth}
                         className="p-1 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-70"
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid var(--color-border)',
-                        }}
+                        style={{ backgroundColor: 'white', border: '1px solid var(--color-border)' }}
                     >
                         <ChevronLeft size={12} style={{ color: 'var(--color-text-muted)' }} />
                     </button>
@@ -128,26 +121,19 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                     <button
                         onClick={nextMonth}
                         className="p-1 rounded-lg cursor-pointer transition-all duration-200 hover:opacity-70"
-                        style={{
-                            backgroundColor: 'white',
-                            border: '1px solid var(--color-border)',
-                        }}
+                        style={{ backgroundColor: 'white', border: '1px solid var(--color-border)' }}
                     >
                         <ChevronRight size={12} style={{ color: 'var(--color-text-muted)' }} />
                     </button>
                 </div>
 
                 {/* Jours de la semaine */}
-                <div className="grid grid-cols-7 mb-0.5">
-                    {['L','M','M','J','V','S','D'].map((d, i) => (
+                <div className="grid grid-cols-7 mb-1">
+                    {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
                         <div
                             key={i}
                             className="text-center py-0.5"
-                            style={{
-                                fontSize: '9px',
-                                fontWeight: 700,
-                                color: 'var(--color-text-muted)',
-                            }}
+                            style={{ fontSize: '9px', fontWeight: 700, color: 'var(--color-text-muted)' }}
                         >
                             {d}
                         </div>
@@ -161,15 +147,18 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                     ))}
 
                     {Array.from({ length: daysInMonth }).map((_, i) => {
-                        const day        = i + 1;
-                        const isToday    = today.getDate() === day
+                        const day = i + 1;
+                        const isToday = today.getDate() === day
                             && today.getMonth() === month
                             && today.getFullYear() === year;
                         const isSelected = selectedDay === day;
                         const dayReminders = remindersByDay[day] ?? [];
-                        const hasReminder  = dayReminders.length > 0;
-                        const hasOverdue   = dayReminders.some(r => isOverdue(r.dueDate));
-                        const isClickable  = hasReminder;
+                        const dayRecords = recordsByDay[day] ?? [];
+                        const hasReminder = dayReminders.length > 0;
+                        const hasRecord = dayRecords.length > 0;
+                        const hasBoth = hasReminder && hasRecord;
+                        const hasOverdue = dayReminders.some(r => isOverdue(r.dueDate));
+                        const hasAny = hasReminder || hasRecord;
 
                         return (
                             <div
@@ -177,24 +166,27 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                                 onClick={() => handleDayClick(day)}
                                 className="flex flex-col items-center justify-center relative"
                                 style={{
-                                    height: '24px',
+                                    height: '28px',
                                     borderRadius: '6px',
-                                    cursor: isClickable ? 'pointer' : 'default',
+                                    cursor: hasAny ? 'pointer' : 'default',
                                     backgroundColor: isSelected
-                                        ? 'var(--color-orange-400)'
+                                        ? 'var(--color-orange-100)'
                                         : isToday
-                                            ? 'var(--color-orange-100)'
+                                            ? 'var(--color-orange-400)'
                                             : 'transparent',
-                                    transition: 'background-color 0.15s',
+                                    outline: isSelected
+                                        ? '2px solid var(--color-orange-400)'
+                                        : 'none',
+                                    transition: 'all 0.15s',
                                 }}
                             >
                                 <span
                                     style={{
                                         fontSize: '10px',
-                                        fontWeight: isToday || isSelected ? 700 : 500,
-                                        color: isSelected
+                                        fontWeight: isToday || isSelected || hasAny ? 700 : 500,
+                                        color: isToday
                                             ? 'white'
-                                            : isToday
+                                            : isSelected
                                                 ? 'var(--color-orange-600)'
                                                 : 'var(--color-text-primary)',
                                         lineHeight: 1,
@@ -203,28 +195,62 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                                     {day}
                                 </span>
 
-                                {/* Point rappel */}
-                                {hasReminder && !isSelected && (
+                                {/* Indicateurs colorés sous le jour */}
+                                {hasAny && !isToday && (
                                     <div
-                                        style={{
-                                            width: '3px',
-                                            height: '3px',
-                                            borderRadius: '50%',
-                                            backgroundColor: hasOverdue
-                                                ? 'var(--color-error)'
-                                                : 'var(--color-orange-400)',
-                                            position: 'absolute',
-                                            bottom: '2px',
-                                        }}
-                                    />
+                                        className="flex gap-0.5 absolute"
+                                        style={{ bottom: '2px' }}
+                                    >
+                                        {/* Point orange — rappel */}
+                                        {hasReminder && (
+                                            <div
+                                                style={{
+                                                    width: hasBoth ? '4px' : '6px',
+                                                    height: '4px',
+                                                    borderRadius: '2px',
+                                                    backgroundColor: hasOverdue
+                                                        ? 'var(--color-error)'
+                                                        : 'var(--color-orange-400)',
+                                                }}
+                                            />
+                                        )}
+                                        {/* Point teal — health record */}
+                                        {hasRecord && (
+                                            <div
+                                                style={{
+                                                    width: hasBoth ? '4px' : '6px',
+                                                    height: '4px',
+                                                    borderRadius: '2px',
+                                                    backgroundColor: 'var(--color-teal-400)',
+                                                }}
+                                            />
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         );
                     })}
                 </div>
 
-                {/* Rappels du jour sélectionné */}
-                {selectedDay && selectedDayReminders.length > 0 && (
+                {/* Légende */}
+                <div className="flex items-center gap-4 mt-3 pt-2"
+                    style={{ borderTop: '1px solid var(--color-border)' }}>
+                    <div className="flex items-center gap-1.5">
+                        <div style={{ width: '8px', height: '4px', borderRadius: '2px', backgroundColor: 'var(--color-orange-400)' }} />
+                        <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: 600 }}>Rappel</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <div style={{ width: '8px', height: '4px', borderRadius: '2px', backgroundColor: 'var(--color-teal-400)' }} />
+                        <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: 600 }}>Santé</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <div style={{ width: '8px', height: '4px', borderRadius: '2px', backgroundColor: 'var(--color-error)' }} />
+                        <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: 600 }}>En retard</span>
+                    </div>
+                </div>
+
+                {/* Détail du jour sélectionné */}
+                {selectedDay && (selectedReminders.length > 0 || selectedRecords.length > 0) && (
                     <div
                         className="mt-3 pt-3"
                         style={{ borderTop: '1px solid var(--color-border)' }}
@@ -233,10 +259,12 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                             className="text-xs font-black uppercase tracking-widest mb-2"
                             style={{ color: 'var(--color-text-muted)' }}
                         >
-                            {selectedDay} {monthName}
+                            {selectedDay} {new Date(year, month, 1).toLocaleDateString('fr-FR', { month: 'long' })}
                         </p>
+
                         <div className="flex flex-col gap-1.5">
-                            {selectedDayReminders.map(r => (
+                            {/* Rappels du jour */}
+                            {selectedReminders.map(r => (
                                 <div
                                     key={r._id}
                                     className="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
@@ -245,8 +273,8 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                                 >
                                     <div
                                         style={{
-                                            width: '6px',
-                                            height: '6px',
+                                            width: '8px',
+                                            height: '8px',
                                             borderRadius: '50%',
                                             flexShrink: 0,
                                             backgroundColor: isOverdue(r.dueDate)
@@ -260,7 +288,50 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                                     >
                                         {r.title}
                                     </p>
-                                    <ArrowUpRight size={11} style={{ color: 'var(--color-text-muted)' }} />
+                                    <span
+                                        className="text-xs font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                                        style={{
+                                            backgroundColor: 'var(--color-orange-100)',
+                                            color: 'var(--color-orange-600)',
+                                        }}
+                                    >
+                                        Rappel
+                                    </span>
+                                </div>
+                            ))}
+
+                            {/* Health records du jour */}
+                            {selectedRecords.map(r => (
+                                <div
+                                    key={r._id}
+                                    className="flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                    style={{ backgroundColor: 'white' }}
+                                    onClick={() => onSelectRecord(r)}
+                                >
+                                    <div
+                                        style={{
+                                            width: '8px',
+                                            height: '8px',
+                                            borderRadius: '50%',
+                                            flexShrink: 0,
+                                            backgroundColor: 'var(--color-teal-400)',
+                                        }}
+                                    />
+                                    <p
+                                        className="text-xs font-semibold flex-1 truncate"
+                                        style={{ color: 'var(--color-text-primary)' }}
+                                    >
+                                        {r.title}
+                                    </p>
+                                    <span
+                                        className="text-xs font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                                        style={{
+                                            backgroundColor: 'var(--color-teal-50)',
+                                            color: 'var(--color-teal-600)',
+                                        }}
+                                    >
+                                        Santé
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -321,16 +392,13 @@ const AnimalRemindersCard = ({ animalId, reminders, onSelect }) => {
                             {isOverdue(reminder.dueDate) && (
                                 <AlertCircle size={14} style={{ color: 'var(--color-error)' }} />
                             )}
-                            <ArrowUpRight
-                                size={14}
-                                style={{ color: 'var(--color-text-muted)' }}
-                            />
+                            <ArrowUpRight size={14} style={{ color: 'var(--color-text-muted)' }} />
                         </div>
                     ))}
 
                     {pendingReminders.length > 3 && (
                         <p
-                            className="text-xs font-bold text-center pt-1 cursor-pointer hover:opacity-70 transition-opacity"
+                            className="text-xs font-bold text-center pt-1 cursor-pointer hover:opacity-70"
                             style={{ color: 'var(--color-orange-500)' }}
                         >
                             +{pendingReminders.length - 3} autres rappels
