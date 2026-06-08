@@ -128,7 +128,7 @@ const Home = () => {
                 <div
                     className="absolute inset-0 md:hidden"
                     style={{
-                        background: 'rgba(250,250,248,0.82)',
+                        background: 'rgba(250,250,248,0.40)',
                     }}
                 />
 
