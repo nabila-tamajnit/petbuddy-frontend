@@ -61,7 +61,7 @@ const Dashboard = () => {
     if (isLoading) return <Spinner fullPage />;
 
     return (
-        <PageWrapper title="Accueil">
+        <PageWrapper title="Dashboard">
             <div className="max-w-5xl mx-auto animate-fadeIn">
 
                 {/* ── En-tête page style Donezo ─────────────────── */}
