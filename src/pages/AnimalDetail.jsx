@@ -177,7 +177,9 @@ const AnimalDetail = () => {
                         <AnimalRemindersCard
                             animalId={id}
                             reminders={reminders}
+                            records={records}
                             onSelect={setSelectedReminder}
+                            onSelectRecord={setSelectedRecord}
                         />
                         <AnimalHealthCard
                             animalId={id}
