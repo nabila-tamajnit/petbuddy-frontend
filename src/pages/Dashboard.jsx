@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    Plus, PawPrint, Bell, ArrowUpRight,
-    ArrowRight, Sparkles, AlertCircle,
-} from 'lucide-react';
+import { Plus, PawPrint, Bell, ArrowUpRight, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -51,12 +48,18 @@ const Dashboard = () => {
         fetchData();
     }, []);
 
-    const urgentReminders = reminders
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Rappels d'aujourd'hui ou futur
+    const futureReminders = reminders.filter(r => new Date(r.dueDate) >= today);
+
+    const urgentReminders = futureReminders
         .filter(r => isOverdue(r.dueDate) || isUpcoming(r.dueDate))
         .slice(0, 4);
 
-    const overdueCount = reminders.filter(r => isOverdue(r.dueDate)).length;
-    const upcomingCount = reminders.filter(r => isUpcoming(r.dueDate)).length;
+    const overdueCount = futureReminders.filter(r => isOverdue(r.dueDate)).length;
+    const upcomingCount = futureReminders.filter(r => isUpcoming(r.dueDate)).length;
 
     if (isLoading) return <Spinner fullPage />;
 
@@ -64,7 +67,7 @@ const Dashboard = () => {
         <PageWrapper title="Dashboard">
             <div className="max-w-5xl mx-auto animate-fadeIn">
 
-                {/* ── En-tête page style Donezo ─────────────────── */}
+                {/* ───────────── En-tête ───────────── */}
                 <div className="flex items-start justify-between mb-8">
                     <div>
                         <h1 className="title-serif text-2xl md:text-3xl mb-1 flex items-center gap-2">
@@ -81,15 +84,6 @@ const Dashboard = () => {
                             }
                         </p>
                     </div>
-                    {/* {animals.length > 0 && (
-                        <Button
-                            leftIcon={<Plus size={16} />}
-                            onClick={() => navigate('/animals/new')}
-                            className="hidden sm:inline-flex"
-                        >
-                            Ajouter un animal
-                        </Button>
-                    )} */}
                 </div>
 
                 {animals.length === 0 ? (
