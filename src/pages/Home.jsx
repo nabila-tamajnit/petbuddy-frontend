@@ -1,7 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
-import {
-    PawPrint, Heart, Bell, Activity, ArrowRight, CheckCircle,
-} from 'lucide-react';
+import { PawPrint, Heart, Bell, Activity, ArrowRight, CheckCircle } from 'lucide-react';
 import Button from '../components/ui/Button';
 import useAuth from '../hooks/useAuth';
 
@@ -100,12 +98,12 @@ const Home = () => {
 
                 {/* Image — desktop et mobile */}
                 <picture className="absolute inset-0 w-full h-full">
-                    {/* Mobile : image portrait */}
+                    {/* Mobile */}
                     <source
                         media="(max-width: 767px)"
                         srcSet="/src/assets/images/hero-animals-mobile.png"
                     />
-                    {/* Desktop : image paysage */}
+                    {/* Desktop */}
                     <img
                         src="/src/assets/images/hero-animals.png"
                         alt="Un chien et un chat heureux"
@@ -118,7 +116,6 @@ const Home = () => {
                     className="absolute inset-0"
                     style={{
                         background: [
-                            // Desktop : dégradé vers la droite
                             'linear-gradient(to right, rgba(250,250,248,0.97) 35%, rgba(250,250,248,0.6) 60%, transparent 80%)',
                         ].join(', '),
                     }}
@@ -272,36 +269,65 @@ const Home = () => {
             </section>
 
             {/* ════════════════════════════════
-                CTA FINAL
+            CTA FINAL
             ════════════════════════════════ */}
             <section className="px-5 md:px-10 lg:px-20 py-14">
-                <div
-                    className="max-w-2xl mx-auto rounded-3xl p-8 md:p-12 text-center"
-                    style={{ background: 'var(--gradient-orange)' }}
-                >
-                    <h2
-                        className="text-2xl md:text-3xl font-bold text-white mb-3"
-                        style={{ fontFamily: 'var(--font-syne)' }}
+                <div className="max-w-2xl mx-auto">
+                    <div
+                        className="relative rounded-3xl p-8 md:p-12 text-center overflow-hidden"
+                        style={{ backgroundColor: 'var(--color-orange-50)', border: '2px solid var(--color-orange-100)' }}
                     >
-                        Prêt à commencer ?
-                    </h2>
-                    <p
-                        className="text-sm mb-7 max-w-sm mx-auto"
-                        style={{ color: 'rgba(255,255,255,0.85)' }}
-                    >
-                        Créez votre compte et ajoutez votre premier animal en quelques minutes.
-                    </p>
-                    <button
-                        onClick={() => navigate('/register')}
-                        className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 hover:opacity-90 active:scale-95 cursor-pointer"
-                        style={{
-                            backgroundColor: 'white',
-                            color: 'var(--color-orange-500)',
-                        }}
-                    >
-                        Créer mon compte
-                        <ArrowRight size={15} />
-                    </button>
+                        {/* Patte arrière-plan */}
+                        <div
+                            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                            style={{ opacity: 0.06 }}
+                        >
+                            <PawPrint
+                                size={320}
+                                style={{ color: 'var(--color-orange-400)' }}
+                            />
+                        </div>
+
+                        {/* Contenu par-dessus */}
+                        <div className="relative z-10">
+                            <div
+                                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
+                                style={{ background: 'var(--gradient-orange)' }}
+                            >
+                                <PawPrint size={26} color="white" />
+                            </div>
+
+                            <h2
+                                className="text-2xl md:text-3xl font-bold mb-3"
+                                style={{
+                                    fontFamily: 'var(--font-syne)',
+                                    color: 'var(--color-orange-600)',
+                                }}
+                            >
+                                Prêt à commencer ?
+                            </h2>
+
+                            <p
+                                className="text-sm font-semibold mb-7 max-w-sm mx-auto"
+                                style={{ color: 'var(--color-orange-500)' }}
+                            >
+                                Créez votre compte et ajoutez votre premier animal en quelques minutes.
+                            </p>
+
+                            <button
+                                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/register')}
+                                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 hover:opacity-90 active:scale-95 cursor-pointer"
+                                style={{
+                                    background: 'var(--gradient-orange)',
+                                    color: 'white',
+                                    boxShadow: '0 4px 14px rgba(245, 106, 56, 0.40)',
+                                }}
+                            >
+                                {isAuthenticated ? 'Accéder à mon espace' : 'Créer mon compte'}
+                                <ArrowRight size={15} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
