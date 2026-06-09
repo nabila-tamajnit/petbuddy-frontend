@@ -166,6 +166,7 @@ const AnimalDetail = () => {
                         <AnimalInfoCard animal={animal} />
                         <AnimalWellnessCard
                             animalId={id}
+                            animalName={animal.name}
                             logs={wellness}
                             tip={tip}
                             onSelect={setSelectedWellness}
