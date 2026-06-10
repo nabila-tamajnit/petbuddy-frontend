@@ -1,5 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { PawPrint, Heart, Bell, Activity, ArrowRight, CheckCircle } from 'lucide-react';
+import heroDesktop from '../assets/images/hero-animals.png';
+import heroMobile from '../assets/images/hero-animals-mobile.png';
 import Button from '../components/ui/Button';
 import useAuth from '../hooks/useAuth';
 
@@ -98,14 +100,12 @@ const Home = () => {
 
                 {/* Image — desktop et mobile */}
                 <picture className="absolute inset-0 w-full h-full">
-                    {/* Mobile */}
                     <source
                         media="(max-width: 767px)"
-                        srcSet="/src/assets/images/hero-animals-mobile.png"
+                        srcSet={heroMobile}
                     />
-                    {/* Desktop */}
                     <img
-                        src="/src/assets/images/hero-animals.png"
+                        src={heroDesktop}
                         alt="Un chien et un chat heureux"
                         className="w-full h-full object-cover object-right"
                     />
